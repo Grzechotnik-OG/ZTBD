@@ -55,7 +55,7 @@ else{
                     <td><?php echo $obj->additional_info; ?></td>
                     <td>
                     <a href="addEdit.php?id=<?php echo $obj->id; ?>"class="btn btn-warning">Edit</a>
-                    <a class="btn btn-danger" onclick="return confirm('Are you sure to delete?');">Delete</a>
+                    <a href="roomAction.php?action_type=delete&id=<?php echo $obj->id; ?>" class="btn btn-danger" onclick="return confirm('Are you sure to delete?');">Delete</a>
                 </td>
                 </tr>
                 <?php } while($obj = sqlsrv_fetch_object( $result ));} else { ?>

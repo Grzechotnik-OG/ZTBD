@@ -33,6 +33,12 @@ if(isset($_POST['submit'])){
         }
     }
 }
+if (($_REQUEST['action_type'] == 'delete') && !empty($_GET['id']))
+{
+    $id = $_GET['id'];
+    $sql = "DELETE FROM room WHERE id = ".$id;
+    $result = sqlsrv_query($link, $sql);
+}
 header("Location:".$redirectURL);
 exit();
 ?>
