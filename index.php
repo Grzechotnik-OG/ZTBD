@@ -1,6 +1,4 @@
 <?php
-// echo "<body style = 'background-color: black'>";
-// Check existence of id parameter before processing further
 // Include config file
 require_once "config.php";
 
@@ -9,7 +7,7 @@ $sql = "SELECT * FROM room";
 
 $result = sqlsrv_query($link, $sql);
 
-if(($result = sqlsrv_query($link, $sql)) !== false)
+if($result !== false)
 {
     $obj = sqlsrv_fetch_object( $result );
 }
@@ -35,7 +33,7 @@ else{
     <div class="wrapper">
         <div class="col-md-12 head">
             <h5>Rooms</h5>
-            <a class="btn btn-success"><i class="plus"></i> New room</a>
+            <a href="addEdit.php" class="btn btn-success"> New room</a>
         </div>
 
         <table class="table table-striped table-bordered" >
@@ -56,8 +54,8 @@ else{
                     <td><?php echo $obj->floor; ?></td>
                     <td><?php echo $obj->additional_info; ?></td>
                     <td>
-                    <a class="btn btn-warning">edit</a>
-                    <a class="btn btn-danger" onclick="return confirm('Are you sure to delete?');">delete</a>
+                    <a href="addEdit.php?id=<?php echo $obj->id; ?>"class="btn btn-warning">Edit</a>
+                    <a class="btn btn-danger" onclick="return confirm('Are you sure to delete?');">Delete</a>
                 </td>
                 </tr>
                 <?php } while($obj = sqlsrv_fetch_object( $result ));} else { ?>
