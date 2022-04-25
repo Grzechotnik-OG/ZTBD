@@ -1,54 +1,73 @@
 <?php
-echo "<body style = 'background-color: black'>";
+// echo "<body style = 'background-color: black'>";
 // Check existence of id parameter before processing further
-    // Include config file
+// Include config file
 require_once "config.php";
 
 // Prepare a select statement
 $sql = "SELECT * FROM room";
 
-if(($result = sqlsrv_query($link, $sql)) !== false){
-    while( $obj = sqlsrv_fetch_object( $result )) {
-        foreach($obj as $key => $value) {
-            print "$value";
-        }
-        echo '<br />';
-    }
+$result = sqlsrv_query($link, $sql);
 
-} else{
+if(($result = sqlsrv_query($link, $sql)) !== false)
+{
+    $obj = sqlsrv_fetch_object( $result );
+}
+else{
     echo "Oops! Something went wrong. Please try again later.";
 }
 
-// Close connection
-sqlsrv_close($link);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>View Record</title>
+    <title>Rooms</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         .wrapper{
-            width: 600px;
             margin: 0 auto;
         }
     </style>
 </head>
 <body>
     <div class="wrapper">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <h1 class="mt-5 mb-3">View Record</h1>
-                    <div class="form-group">
-                        <label>Name</label>
-                        <p><b><?php echo $row["name"]; ?></b></p>
-                    </div>
-                </div>
-            </div>
+        <div class="col-md-12 head">
+            <h5>Rooms</h5>
+            <a class="btn btn-success"><i class="plus"></i> New room</a>
         </div>
+
+        <table class="table table-striped table-bordered" >
+            <thead class="thead-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Number</th>
+                    <th>Floor</th>
+                    <th>Add info</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if(!is_null($obj)){ $count = 0; do { $count++; ?>
+                <tr>
+                    <td><?php echo $count; ?></td>
+                    <td><?php echo $obj->number; ?></td>
+                    <td><?php echo $obj->floor; ?></td>
+                    <td><?php echo $obj->additional_info; ?></td>
+                    <td>
+                    <a class="btn btn-warning">edit</a>
+                    <a class="btn btn-danger" onclick="return confirm('Are you sure to delete?');">delete</a>
+                </td>
+                </tr>
+                <?php } while($obj = sqlsrv_fetch_object( $result ));} else { ?>
+                <tr><td colspan="7">No member(s) found...</td></tr>
+                <?php } ?>
+            </tbody>
+        </table>
     </div>
 </body>
 </html>
+
+<?php // Close connection
+sqlsrv_close($link); ?>
