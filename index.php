@@ -9,7 +9,7 @@ $result = sqlsrv_query($link, $sql);
 
 if($result !== false)
 {
-    $obj = sqlsrv_fetch_object( $result );
+    $room = sqlsrv_fetch_object( $result );
 }
 else{
     echo "Oops! Something went wrong. Please try again later.";
@@ -47,18 +47,18 @@ else{
                 </tr>
             </thead>
             <tbody>
-                <?php if(!is_null($obj)){ $count = 0; do { $count++; ?>
+                <?php if(!is_null($room)){ $count = 0; do { $count++; ?>
                 <tr>
                     <td><?php echo $count; ?></td>
-                    <td><?php echo $obj->number; ?></td>
-                    <td><?php echo $obj->floor; ?></td>
-                    <td><?php echo $obj->additional_info; ?></td>
+                    <td><?php echo $room->number; ?></td>
+                    <td><?php echo $room->floor; ?></td>
+                    <td><?php echo $room->additional_info; ?></td>
                     <td>
-                    <a href="addEdit.php?id=<?php echo $obj->id; ?>"class="btn btn-warning">Edit</a>
-                    <a href="roomAction.php?action_type=delete&id=<?php echo $obj->id; ?>" class="btn btn-danger" onclick="return confirm('Are you sure to delete?');">Delete</a>
+                    <a href="addEdit.php?id=<?php echo $room->id; ?>"class="btn btn-warning">Edit</a>
+                    <a href="roomAction.php?action_type=delete&id=<?php echo $room->id; ?>" class="btn btn-danger" onclick="return confirm('Are you sure to delete?');">Delete</a>
                 </td>
                 </tr>
-                <?php } while($obj = sqlsrv_fetch_object( $result ));} else { ?>
+                <?php } while($room = sqlsrv_fetch_object( $result ));} else { ?>
                 <tr><td colspan="7">No member(s) found...</td></tr>
                 <?php } ?>
             </tbody>

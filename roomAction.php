@@ -8,24 +8,26 @@ if(isset($_POST['submit'])){
     $id = $_POST['id'];
     $number = trim(strip_tags($_POST['number']));
     $floor = trim(strip_tags($_POST['floor']));
-    $id_str = '';
-
-    if(!empty($id)){
-        $id_str = '?id='.$id;
-    }
-
+    $info = trim(strip_tags($_POST['info']));
+    $hotel = trim(strip_tags($_POST['hotel']));
+    $roomType = trim(strip_tags($_POST['room_type']));
+    $idStr = '';
     if(!empty($id))
     {
-        $sql = "UPDATE room SET number = ".$number.", floor = ".$floor." WHERE id = ".$id;
+        $idStr = '?id='.$id;
+
+        $sql = "UPDATE room SET number = '$number', floor = '$floor', additional_info = '$info',
+            hotel_id = '$hotel', room_type_id = '$roomType' WHERE id = ".$id;
         $result = sqlsrv_query($link, $sql);
         if($result === false)
         {
-            $redirectURL = 'addEdit.php'.$id_str;
+            $redirectURL = 'addEdit.php'.$idStr;
         }
     }
     else
     {
-        $sql = "INSERT INTO room (number, floor, hotel_id, room_type_id) VALUES (".$number.",".$floor.",1,1)";
+        $sql = "INSERT INTO room (number, floor, additional_info, hotel_id, room_type_id)
+            VALUES ('$number','$floor','$info','$hotel','$roomType')";
         $result = sqlsrv_query($link, $sql);
         if($result === false)
         {
