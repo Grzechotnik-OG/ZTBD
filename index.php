@@ -32,37 +32,11 @@ else{
 <body>
     <div class="wrapper">
         <div class="col-md-12 head">
-            <h5>Rooms</h5>
-            <a href="addEdit.php" class="btn btn-success"> New room</a>
+            <h5>System do zarzadzania siecią hoteli</h5>
+            <a href="views/hotelsList.php" class="btn btn-info">Hotele</a>
+            <a href="views/clientsList.php" class="btn btn-info">Klienci</a>
+            <a href="views/servicesList.php" class="btn btn-info">Usługi</a>
         </div>
-
-        <table class="table table-striped table-bordered" >
-            <thead class="thead-dark">
-                <tr>
-                    <th>#</th>
-                    <th>Number</th>
-                    <th>Floor</th>
-                    <th>Add info</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if(!is_null($room)){ $count = 0; do { $count++; ?>
-                <tr>
-                    <td><?php echo $count; ?></td>
-                    <td><?php echo $room->number; ?></td>
-                    <td><?php echo $room->floor; ?></td>
-                    <td><?php echo $room->additional_info; ?></td>
-                    <td>
-                    <a href="addEdit.php?id=<?php echo $room->id; ?>"class="btn btn-warning">Edit</a>
-                    <a href="roomAction.php?action_type=delete&id=<?php echo $room->id; ?>" class="btn btn-danger" onclick="return confirm('Are you sure to delete?');">Delete</a>
-                </td>
-                </tr>
-                <?php } while($room = sqlsrv_fetch_object( $result ));} else { ?>
-                <tr><td colspan="7">No member(s) found...</td></tr>
-                <?php } ?>
-            </tbody>
-        </table>
     </div>
 </body>
 </html>

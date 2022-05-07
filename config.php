@@ -1,5 +1,5 @@
 <?php
-$serverName = "LAPTOP-BT9T5B98\\EXPRESS"; //serverName\instanceName
+$serverName = "DESKTOP-3J4E2BF"; //serverName\instanceName
 
 // Since UID and PWD are not specified in the $connectionInfo array,
 // The connection will be attempted using Windows Authentication.
