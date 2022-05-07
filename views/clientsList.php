@@ -57,7 +57,7 @@ else{
                     <td><?php echo $client->phone_number; ?></td>
                     <td>
                     <a href="addEditClient.php?id=<?php echo $client->id; ?>"class="btn btn-warning">Edit</a>
-                    <a href="singleclient.php?id=<?php echo $client->id; ?>"class="btn btn-info">Info</a>
+                    <a href="singleClient.php?id=<?php echo $client->id; ?>"class="btn btn-info">Info</a>
                     <a href="clientAction.php?action_type=delete&id=<?php echo $client->id; ?>" class="btn btn-danger" onclick="return confirm('Are you sure to delete?');">Delete</a>
                 </td>
                 </tr>

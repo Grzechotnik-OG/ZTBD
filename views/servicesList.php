@@ -40,9 +40,8 @@ else{
             <thead class="thead-dark">
                 <tr>
                     <th>#</th>
-                    <th>address</th>
+                    <th>name</th>
                     <th>description</th>
-                    <th>phone number</th>
                     <th></th>
                 </tr>
             </thead>
@@ -50,13 +49,11 @@ else{
                 <?php if(!is_null($service)){ $count = 0; do { $count++; ?>
                 <tr>
                     <td><?php echo $count; ?></td>
-                    <td><?php echo $service->address; ?></td>
+                    <td><?php echo $service->name; ?></td>
                     <td><?php echo $service->description; ?></td>
-                    <td><?php echo $service->phone_number; ?></td>
                     <td>
                     <a href="addEditService.php?id=<?php echo $service->id; ?>"class="btn btn-warning">Edit</a>
-                    <a href="singleservice.php?id=<?php echo $service->id; ?>"class="btn btn-info">Info</a>
-                    <a href="serviceAction.php?action_type=delete&id=<?php echo $service->id; ?>" class="btn btn-danger" onclick="return confirm('Are you sure to delete?');">Delete</a>
+                    <a href="../actions/serviceAction.php?action_type=delete&id=<?php echo $service->id; ?>" class="btn btn-danger" onclick="return confirm('Are you sure to delete?');">Delete</a>
                 </td>
                 </tr>
                 <?php } while($service = sqlsrv_fetch_object( $result ));} else { ?>

@@ -37,7 +37,7 @@ $actionLabel = "Info";
             <?php echo "Addres: ".$hotel->address; ?><br/>
             <?php echo "Description: ".$hotel->description; ?><br/>
             <?php echo "Phone number: ".$hotel->phone_number; ?><br/>
-            <a href="addEditHotel.php?id=<?php echo $room->id; ?>"class="btn btn-warning">Edit</a>
+            <a href="addEditHotel.php?id=<?php echo $hotel->id; ?>"class="btn btn-warning">Edit</a>
         </div>
         <div class="col-md-12 head">
             <h5>Rooms</h5>
