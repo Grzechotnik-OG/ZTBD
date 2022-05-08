@@ -56,7 +56,7 @@ else{
                     <td>
                     <a href="addEditHotel.php?id=<?php echo $hotel->id; ?>"class="btn btn-warning">Edit</a>
                     <a href="singleHotel.php?id=<?php echo $hotel->id; ?>"class="btn btn-info">Info</a>
-                    <a href="hotelAction.php?action_type=delete&id=<?php echo $hotel->id; ?>" class="btn btn-danger" onclick="return confirm('Are you sure to delete?');">Delete</a>
+                    <a href="../actions/hotelAction.php?action_type=delete&id=<?php echo $hotel->id; ?>" class="btn btn-danger" onclick="return confirm('Are you sure to delete?');">Delete</a>
                 </td>
                 </tr>
                 <?php } while($hotel = sqlsrv_fetch_object( $result ));} else { ?>

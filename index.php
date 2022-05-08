@@ -36,6 +36,7 @@ else{
             <a href="views/hotelsList.php" class="btn btn-info">Hotele</a>
             <a href="views/clientsList.php" class="btn btn-info">Klienci</a>
             <a href="views/servicesList.php" class="btn btn-info">Usługi</a>
+            <a href="views/reservationsList.php" class="btn btn-info">Rezerwacje</a>
         </div>
     </div>
 </body>

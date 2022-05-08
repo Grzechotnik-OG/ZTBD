@@ -21,7 +21,7 @@ if(isset($_POST['submit'])){
         $result = sqlsrv_query($link, $sql);
         if($result === false)
         {
-            $redirectURL = 'addEdit.php'.$idStr;
+            $redirectURL = 'addEditRoom.php'.$idStr;
         }
     }
     else
@@ -31,7 +31,7 @@ if(isset($_POST['submit'])){
         $result = sqlsrv_query($link, $sql);
         if($result === false)
         {
-            $redirectURL = 'addEdit.php';
+            $redirectURL = 'addEditRoom.php';
         }
     }
 }
