@@ -41,12 +41,12 @@ $actionLabel = !empty($_GET['id'])?'Edit':'Add';
                         $resHotel = sqlsrv_query($link, "SELECT * FROM hotel where id =".$_GET['hotel_id']);
                     }else{
                         $resHotel = sqlsrv_query($link, "SELECT * FROM hotel");
+                        echo '<option value="" selected disabled>Please select</option>';
                     }
-                    echo '<option value="" selected disabled>Please select</option>';
                     $selected="";
                     while ($hotel = sqlsrv_fetch_object($resHotel))
                     {
-                        if($room->hotel_id == $hotel->id) $selected="selected='selected'";
+                        if($room->hotel_id == $hotel->id || $_GET['hotel_id'] == $hotel->id) $selected="selected='selected'";
                         echo '<option value="'.$hotel->id.'"'.$selected.'>'.$hotel->address.'</option>';
                         $selected="";
                     }
