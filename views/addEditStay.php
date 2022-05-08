@@ -4,9 +4,9 @@ require_once '../config.php';
 
 if(!empty($_GET['id']))
 {
-    $sql = "SELECT * FROM reservation WHERE id = ".$_GET['id'];
+    $sql = "SELECT * FROM stay WHERE id = ".$_GET['id'];
     $result = sqlsrv_query($link, $sql);
-    $reservation = sqlsrv_fetch_object( $result );
+    $stay = sqlsrv_fetch_object( $result );
 }
 
 $actionLabel = !empty($_GET['id'])?'Edit':'Add';
@@ -16,17 +16,17 @@ $actionLabel = !empty($_GET['id'])?'Edit':'Add';
 
 <div class="row">
     <div class="col-md-12">
-        <h2><?php echo $actionLabel; ?> reservation</h2>
+        <h2><?php echo $actionLabel; ?> stay</h2>
     </div>
     <div class="col-md-6">
-         <form method="post" action="../actions/reservationAction.php">
+         <form method="post" action="../actions/stayAction.php">
             <div class="form-group">
                 <label>Start date</label>
-                <input type="date" class="form-control" name="start_date" placeholder="Enter start date" value="<?php echo !empty($reservation->start_date)?$reservation->start_date->format('Y-m-d'):''; ?>" required="">
+                <input type="date" class="form-control" name="start_date" placeholder="Enter start date" value="<?php echo !empty($stay->start_date)?$stay->start_date->format('Y-m-d'):''; ?>" required="">
             </div>
             <div class="form-group">
                 <label>End date</label>
-                <input type="date" class="form-control" name="end_date" placeholder="Enter end date" value="<?php echo !empty($reservation->end_date)?$reservation->end_date->format('Y-m-d'):''; ?>" required="">
+                <input type="date" class="form-control" name="end_date" placeholder="Enter end date" value="<?php echo !empty($stay->end_date)?$stay->end_date->format('Y-m-d'):''; ?>" required="">
             </div>
             <div class="form-group">
                 <label>Client</label>
@@ -43,7 +43,7 @@ $actionLabel = !empty($_GET['id'])?'Edit':'Add';
                     $selected="";
                     while ($client = sqlsrv_fetch_object($resClient))
                     {
-                        if($reservation->client_id == $client->id) $selected="selected='selected'";
+                        if($stay->client_id == $client->id) $selected="selected='selected'";
                         echo '<option value="'.$client->id.'"'.$selected.'>'.$client->name.' '.$client->surname.' '.$client->phone_number.'</option>';
                         $selected="";
                     }
@@ -65,7 +65,7 @@ $actionLabel = !empty($_GET['id'])?'Edit':'Add';
                     $selected="";
                     while ($room = sqlsrv_fetch_object($resRoom))
                     {
-                        if($reservation->room_id == $room->id) $selected="selected='selected'";
+                        if($stay->room_id == $room->id) $selected="selected='selected'";
                         echo '<option value="'.$room->id.'"'.$selected.'>'.$room->address.' Room Number: '.$room->number.'</option>';
                         $selected="";
                     }
@@ -73,7 +73,7 @@ $actionLabel = !empty($_GET['id'])?'Edit':'Add';
                 </select>
             </div>
             <a href="index.php" class="btn btn-secondary">Back</a>
-            <input type="hidden" name="id" value="<?php echo !empty($reservation->id)?$reservation->id:''; ?>">
+            <input type="hidden" name="id" value="<?php echo !empty($stay->id)?$stay->id:''; ?>">
             <input type="submit" name="submit" class="btn btn-success" value="Submit">
         </form>
     </div>
