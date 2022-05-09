@@ -6,7 +6,7 @@ if(!empty($_GET['id']))
 {
     $sql = "SELECT * FROM hotel WHERE id = ".$_GET['id'];
     $sqlRooms = "SELECT * FROM room where hotel_id = ".$_GET['id'];
-    $sqlServices = "SELECT * FROM hotel_service 
+    $sqlServices = "SELECT hotel_service.id, hotel_service.price, service.id AS service_id, service.name, service.description FROM hotel_service 
     INNER JOIN service ON service_id=service.id
     where hotel_id = ".$_GET['id'];
 
@@ -40,7 +40,7 @@ $actionLabel = "Info";
     <div class="wrapper">
         <div class="col-md-12 head">
             <h5>Hotel</h5>
-            <?php echo "Addres: ".$hotel->address; ?><br/>
+            <?php echo "Address: ".$hotel->address; ?><br/>
             <?php echo "Description: ".$hotel->description; ?><br/>
             <?php echo "Phone number: ".$hotel->phone_number; ?><br/>
             <a href="addEditHotel.php?id=<?php echo $hotel->id; ?>"class="btn btn-warning">Edit</a>
@@ -70,10 +70,10 @@ $actionLabel = "Info";
                     <td>
                     <a href="singleRoom.php?id=<?php echo $room->id; ?>"class="btn btn-info">Info</a>
                     <a href="addEditRoom.php?id=<?php echo $room->id; ?>"class="btn btn-warning">Edit</a>
-                    <a href="roomAction.php?action_type=delete&id=<?php echo $room->id; ?>&hotel_id=<?php echo $hotel->id; ?>" class="btn btn-danger" onclick="return confirm('Are you sure to delete?');">Delete</a>
+                    <a href="../actions/roomAction.php?action_type=delete&id=<?php echo $room->id; ?>" class="btn btn-danger" onclick="return confirm('Are you sure to delete?');">Delete</a>
                 </td>
                 </tr>
-                <?php } while($room = sqlsrv_fetch_object( $result ));} else { ?>
+                <?php } while($room = sqlsrv_fetch_object( $resultRooms ));} else { ?>
                 <tr><td colspan="7">No member(s) found...</td></tr>
                 <?php } ?>
             </tbody>
@@ -102,11 +102,11 @@ $actionLabel = "Info";
                     <td><?php echo $service->description; ?></td>
                     <td><?php echo $service->price; ?></td>
                     <td>
-                    <a href="addEditHotelService.php?id=<?php echo $service->id; ?>&hotel_id=<?php echo $hotel->id; ?>"class="btn btn-warning">Edit</a>
-                    <a href="hotelServiceAction.php?action_type=delete&id=<?php echo $service->id; ?>&hotel_id=<?php echo $hotel->id; ?>" class="btn btn-danger" onclick="return confirm('Are you sure to delete?');">Delete</a>
+                    <a href="addEditHotelService.php?id=<?php echo $service->id; ?>&hotel_id=<?php echo $hotel->id; ?>&service_id=<?php echo $service->service_id; ?>"class="btn btn-warning">Edit</a>
+                    <a href="../actions/hotelServiceAction.php?action_type=delete&id=<?php echo $service->id; ?>&hotel_id=<?php echo $hotel->id; ?>" class="btn btn-danger" onclick="return confirm('Are you sure to delete?');">Delete</a>
                 </td>
                 </tr>
-                <?php } while($service = sqlsrv_fetch_object( $result ));} else { ?>
+                <?php } while($service = sqlsrv_fetch_object( $resultServices ));} else { ?>
                 <tr><td colspan="7">No member(s) found...</td></tr>
                 <?php } ?>
             </tbody>

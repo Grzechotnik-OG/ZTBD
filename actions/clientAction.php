@@ -4,7 +4,7 @@ require_once '../config.php';
 
 $redirectURL = '../index.php';
 
-if(isset($_POST['submit'])){
+if(isset($_POST['submit']) && isset($_POST['id'])){
     $id = $_POST['id'];
     $address = trim(strip_tags($_POST['address']));
     $name = trim(strip_tags($_POST['name']));
@@ -36,6 +36,19 @@ if(isset($_POST['submit'])){
         }
     }
 }
+else if(isset($_POST['submit']) && isset($_POST['client_id'])){
+    $id = $_POST['client_id'];
+    $idStr = '?id='.$id;
+
+    $registered_payment = trim(strip_tags($_POST['registered_payment']));
+    $new_payment = trim(strip_tags($_POST['new_payment']));
+    $tmp = $registered_payment + $new_payment;
+
+    $sql = "UPDATE client SET registered_payment = '$tmp' WHERE id = ".$id;
+    $result = sqlsrv_query($link, $sql);
+    $redirectURL = '../views/singleClient.php'.$idStr;
+}
+
 if (($_REQUEST['action_type'] == 'delete') && !empty($_GET['id']))
 {
     $id = $_GET['id'];

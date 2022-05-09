@@ -49,24 +49,19 @@ $actionLabel = !empty($_GET['id'])?'Edit':'Add';
                 <label>Service</label>
                 <select name="service" class="form-control">
                 <?php
-                    if (!empty($_GET['service_id']))
-                    {
-                        $resService = sqlsrv_query($link, "SELECT * FROM service where id =".$_GET['service_id']);
-                    }else{
-                        $resService = sqlsrv_query($link, "SELECT * FROM service");
-                        echo '<option value="" selected disabled>Please select</option>';
-                    }
+                    $resService = sqlsrv_query($link, "SELECT * FROM service");
+                    echo '<option value="" selected disabled>Please select</option>';
                     $selected="";
-                    while ($Service = sqlsrv_fetch_object($resService))
+                    while ($service = sqlsrv_fetch_object($resService))
                     {
-                        if($hotelService->Service_id == $Service->id || $_GET['service_id'] == $Service->id) $selected="selected='selected'";
-                        echo '<option value="'.$Service->id.'"'.$selected.'>'.$Service->name.'</option>';
+                        if($hotelService->service_id == $service->id || $_GET['service_id'] == $service->id) $selected="selected='selected'";
+                        echo '<option value="'.$service->id.'"'.$selected.'>'.$service->name.'</option>';
                         $selected="";
                     }
                 ?>
                 </select>
             </div>
-            <a href="index.php" class="btn btn-secondary">Back</a>
+            <a href="singleHotel.php?id=<?php echo $_GET['hotel_id']?>" class="btn btn-secondary">Back</a>
             <input type="hidden" name="id" value="<?php echo !empty($hotelService->id)?$hotelService->id:''; ?>">
             <input type="submit" name="submit" class="btn btn-success" value="Submit">
         </form>

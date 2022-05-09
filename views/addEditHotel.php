@@ -32,7 +32,7 @@ $actionLabel = !empty($_GET['id'])?'Edit':'Add';
                 <label>phone number</label>
                 <input type="text" class="form-control" name="phone_number" placeholder="Enter phone number" value="<?php echo !empty($hotel->phone_number)?$hotel->phone_number:''; ?>">
             </div>
-            <a href="index.php" class="btn btn-secondary">Back</a>
+            <a href="singleHotel.php?id=<?php echo $hotel->id;?>" class="btn btn-secondary">Back</a>
             <input type="hidden" name="id" value="<?php echo !empty($hotel->id)?$hotel->id:''; ?>">
             <input type="submit" name="submit" class="btn btn-success" value="Submit">
         </form>

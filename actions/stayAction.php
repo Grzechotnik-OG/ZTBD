@@ -43,6 +43,14 @@ if (($_REQUEST['action_type'] == 'delete') && !empty($_GET['id']))
 if (($_REQUEST['action_type'] == 'addReservationStay') && !empty($_GET['reservation_id']))
 {
     $reservationId = $_GET['reservation_id'];
+    if(!empty($_GET['room_id'])){
+        $returnId = $_GET['room_id'];
+        $redirectURL = '../views/singleRoom.php?id='.$returnId;
+    }
+    else{
+        $returnId = $_GET['client_id'];
+        $redirectURL = '../views/singleClient.php?id='.$returnId;
+    }
     $sql = "INSERT INTO stay (reservation_id)
             VALUES ('$reservationId')";
     $result = sqlsrv_query($link, $sql);

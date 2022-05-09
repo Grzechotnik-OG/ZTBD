@@ -27,6 +27,7 @@ if(isset($_POST['submit'])){
     {
         $sql = "INSERT INTO reservation (start_date, end_date, client_id, room_id)
             VALUES ('$start','$end','$client','$room')";
+        echo $sql;
         $result = sqlsrv_query($link, $sql);
         if($result === false)
         {
