@@ -34,8 +34,8 @@ if(isset($_POST['submit']) && isset($_POST['id'])){
     }
     else
     {
-        $sql = "INSERT INTO client (address, name, surname, email, phone_number)
-            VALUES ('$address','$name', '$surname', '$email', '$phone_number')";
+        $sql = "INSERT INTO client (address, name, surname, registered_payment, email, phone_number)
+            VALUES ('$address','$name', '$surname', 0, '$email', '$phone_number')";
         $result = sqlsrv_query($link, $sql);
         if($result === false)
         {
