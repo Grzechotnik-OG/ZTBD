@@ -4,25 +4,36 @@ require_once '../config.php';
 
 if(!empty($_GET['id']))
 {
-    $sql = "SELECT stay.id, stay.start_date, stay.end_date, room.number, hotel.id AS hotelId, hotel.address, client.name, client.surname
-    FROM (((stay INNER JOIN room ON stay.room_id=room.id)
-    INNER JOIN hotel ON room.hotel_id=hotel.id)
-    INNER JOIN client ON stay.client_id=client.id)
-    where stay.id = ".$_GET['id']."
-    UNION
-	SELECT stay.id, reservation.start_date, reservation.end_date, room.number, hotel.id AS hotelId, hotel.address, client.name, client.surname
-    FROM ((((reservation INNER JOIN room ON reservation.room_id=room.id)
-    INNER JOIN hotel ON room.hotel_id=hotel.id)
-    INNER JOIN client ON reservation.client_id=client.id)
-    INNER JOIN stay ON stay.reservation_id=reservation.id)
-    where stay.id = ".$_GET['id'];
-    $result = sqlsrv_query($link, $sql);
-    $stay = sqlsrv_fetch_object( $result );
+    $stayId = $_GET['id'];
+    //$sql = "SELECT stay.id, stay.start_date, stay.end_date, room.number, hotel.id AS hotelId, hotel.address, client.name, client.surname
+    //FROM (((stay INNER JOIN room ON stay.room_id=room.id)
+    //INNER JOIN hotel ON room.hotel_id=hotel.id)
+    //INNER JOIN client ON stay.client_id=client.id)
+    //where stay.id = ".$_GET['id']."
+    //UNION
+	//SELECT stay.id, reservation.start_date, reservation.end_date, room.number, hotel.id AS hotelId, hotel.address, client.name, client.surname
+    //FROM ((((reservation INNER JOIN room ON reservation.room_id=room.id)
+    //INNER JOIN hotel ON room.hotel_id=hotel.id)
+    //INNER JOIN client ON reservation.client_id=client.id)
+    //INNER JOIN stay ON stay.reservation_id=reservation.id)
+    //where stay.id = ".$_GET['id'];
+    //$result = sqlsrv_query($link, $sql);
+    //$stay = sqlsrv_fetch_object( $result );
 
-    $sqlHotelServiceStays = "SELECT hotel_service_stay.id, service.name, service.description, hotel_service.price FROM ((hotel_service_stay INNER JOIN hotel_service ON hotel_service.id = hotel_service_stay.hotel_service_id)
-    INNER JOIN service ON service.id=hotel_service.service_id) WHERE hotel_service_stay.stay_id=".$_GET['id'];
-    $resultService = sqlsrv_query($link, $sqlHotelServiceStays);
-    $service = sqlsrv_fetch_object( $resultService );
+    //$sqlHotelServiceStays = "SELECT hotel_service_stay.id, service.name, service.description, hotel_service.price FROM ((hotel_service_stay INNER JOIN hotel_service ON hotel_service.id = hotel_service_stay.hotel_service_id)
+    //INNER JOIN service ON service.id=hotel_service.service_id) WHERE hotel_service_stay.stay_id=".$_GET['id'];
+    //$resultService = sqlsrv_query($link, $sqlHotelServiceStays);
+    //$service = sqlsrv_fetch_object( $resultService );
+
+    $sql = "EXEC dbo.getStay @StayId = ?";
+    $stmt = sqlsrv_prepare($link, $sql, array( &$stayId));
+    sqlsrv_execute($stmt);
+    $stay = sqlsrv_fetch_object( $stmt );
+
+    $sqlHotelServiceStays = "EXEC dbo.getHotelServiceStays @StayId = ?";
+    $stmtService = sqlsrv_prepare($link, $sqlHotelServiceStays, array( &$stayId ));
+    sqlsrv_execute($stmtService);
+    $service = sqlsrv_fetch_object( $stmtService );
 }
 ?>
 <!DOCTYPE html>

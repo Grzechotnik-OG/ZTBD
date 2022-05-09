@@ -4,35 +4,54 @@ require_once '../config.php';
 
 if(!empty($_GET['id']))
 {
-    $sql = "SELECT room.id as room_id, * FROM room 
-    inner join hotel on hotel_id = hotel.id
-    inner join room_type on room_type_id = room_type.id
-    WHERE room.id = ".$_GET['id'];
-    $sqlReservations = "SELECT stay.reservation_id AS resId, reservation.id, reservation.start_date, reservation.end_date, room.number, hotel.address, client.name, client.surname
-    FROM ((((reservation INNER JOIN room ON reservation.room_id=room.id)
-    INNER JOIN hotel ON room.hotel_id=hotel.id)
-    INNER JOIN client ON reservation.client_id=client.id)
-    LEFT JOIN stay ON reservation.id=stay.reservation_id)
-    where reservation.room_id = ".$_GET['id']." Order BY room.hotel_id";
-    $sqlStays = "SELECT stay.id, stay.start_date, stay.end_date, room.number, hotel.address, client.name, client.surname
-    FROM (((stay INNER JOIN room ON stay.room_id=room.id)
-    INNER JOIN hotel ON room.hotel_id=hotel.id)
-    INNER JOIN client ON stay.client_id=client.id)
-    where room_id = ".$_GET['id']."
-    UNION
-	SELECT stay.id, reservation.start_date, reservation.end_date, room.number, hotel.address, client.name, client.surname
-    FROM ((((reservation INNER JOIN room ON reservation.room_id=room.id)
-    INNER JOIN hotel ON room.hotel_id=hotel.id)
-    INNER JOIN client ON reservation.client_id=client.id)
-    INNER JOIN stay ON stay.reservation_id=reservation.id)
-    where reservation.room_id = ".$_GET['id'];
-    $result = sqlsrv_query($link, $sql);
-    $room = sqlsrv_fetch_object( $result );
+    $roomId = $_GET['id'];
 
-    $resultReservations = sqlsrv_query($link, $sqlReservations);
-    $reservation = sqlsrv_fetch_object( $resultReservations );
-    $resultStays = sqlsrv_query($link, $sqlStays);
-    $stay = sqlsrv_fetch_object( $resultStays );
+    //$sql = "SELECT room.id as room_id, * FROM room 
+    //inner join hotel on hotel_id = hotel.id
+    //inner join room_type on room_type_id = room_type.id
+    //WHERE room.id = ".$_GET['id'];
+    //$sqlReservations = "SELECT stay.reservation_id AS resId, reservation.id, reservation.start_date, reservation.end_date, room.number, hotel.address, client.name, client.surname
+    //FROM ((((reservation INNER JOIN room ON reservation.room_id=room.id)
+    //INNER JOIN hotel ON room.hotel_id=hotel.id)
+    //INNER JOIN client ON reservation.client_id=client.id)
+    //LEFT JOIN stay ON reservation.id=stay.reservation_id)
+    //where reservation.room_id = ".$_GET['id']." Order BY room.hotel_id";
+    //$sqlStays = "SELECT stay.id, stay.start_date, stay.end_date, room.number, hotel.address, client.name, client.surname
+    //FROM (((stay INNER JOIN room ON stay.room_id=room.id)
+    //INNER JOIN hotel ON room.hotel_id=hotel.id)
+    //INNER JOIN client ON stay.client_id=client.id)
+    //where room_id = ".$_GET['id']."
+    //UNION
+	//SELECT stay.id, reservation.start_date, reservation.end_date, room.number, hotel.address, client.name, client.surname
+    //FROM ((((reservation INNER JOIN room ON reservation.room_id=room.id)
+    //INNER JOIN hotel ON room.hotel_id=hotel.id)
+    //INNER JOIN client ON reservation.client_id=client.id)
+    //INNER JOIN stay ON stay.reservation_id=reservation.id)
+    //where reservation.room_id = ".$_GET['id'];
+    //$result = sqlsrv_query($link, $sql);
+    //$room = sqlsrv_fetch_object( $result );
+
+    $sql = "EXEC dbo.getRoom @RoomId = ?";
+    $stmt = sqlsrv_prepare($link, $sql, array( &$roomId));
+    sqlsrv_execute($stmt);
+    $room = sqlsrv_fetch_object( $stmt );
+
+    //$resultReservations = sqlsrv_query($link, $sqlReservations);
+    //$reservation = sqlsrv_fetch_object( $resultReservations );
+
+    $sqlReservations = "EXEC dbo.getReservationByRoomId @RoomId = ?";
+    $stmtReservations = sqlsrv_prepare($link, $sqlReservations, array( &$roomId));
+    sqlsrv_execute($stmtReservations);
+    $reservation = sqlsrv_fetch_object( $stmtReservations );
+
+    //$resultStays = sqlsrv_query($link, $sqlStays);
+    //$stay = sqlsrv_fetch_object( $resultStays );
+
+    $sqlStays = "EXEC dbo.getStaysByRoomId @RoomId = ?";
+    $stmtStays = sqlsrv_prepare($link, $sqlStays, array( &$roomId));
+    sqlsrv_execute($stmtStays);
+    $stay = sqlsrv_fetch_object( $stmtStays );
+
 }else{
     
 }
@@ -100,7 +119,7 @@ $actionLabel = "Info";
                     <a href="../actions/stayAction.php?action_type=addReservationStay&reservation_id=<?php echo $reservation->id; ?>&&room_id=<?php echo $room->room_id; ?>" class="btn btn-success">Potwierdź pobyt</a>
                 </td>
                 </tr>
-                <?php } while($reservation = sqlsrv_fetch_object( $resultReservations ));} else { ?>
+                <?php } while($reservation = sqlsrv_fetch_object( $stmtReservations ));} else { ?>
                 <tr><td colspan="7">No member(s) found...</td></tr>
                 <?php } ?>
             </tbody>
@@ -132,7 +151,7 @@ $actionLabel = "Info";
                     <a href="../actions/stayAction.php?action_type=delete&id=<?php echo $stay->id; ?>" class="btn btn-danger" onclick="return confirm('Are you sure to delete?');">Delete</a>
                 </td>
                 </tr>
-                <?php } while($stay = sqlsrv_fetch_object( $resultStays ));} else { ?>
+                <?php } while($stay = sqlsrv_fetch_object( $stmtStays ));} else { ?>
                 <tr><td colspan="7">No member(s) found...</td></tr>
                 <?php } ?>
             </tbody>

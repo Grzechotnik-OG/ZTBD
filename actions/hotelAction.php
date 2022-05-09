@@ -14,20 +14,26 @@ if(isset($_POST['submit'])){
     {
         $idStr = '?id='.$id;
 
-        $sql = "UPDATE hotel SET address = '$address', description = '$description', phone_number = '$phone_number'
-            WHERE id = ".$id;
-        $result = sqlsrv_query($link, $sql);
-        if($result === false)
+        //$sql = "UPDATE hotel SET address = '$address', description = '$description', phone_number = '$phone_number'
+        //    WHERE id = ".$id;
+        //$result = sqlsrv_query($link, $sql);
+
+        $sql = "EXEC dbo.editHotel @Address = ?, @Description = ?, @PhoneNumber = ?, @HotelId = ?";
+        $stmt = sqlsrv_prepare($link, $sql, array( &$address, &$description, &$phone_number, &$id ));
+        if(!sqlsrv_execute($stmt))
         {
             $redirectURL = '../views/addEditHotel.php'.$idStr;
         }
     }
     else
     {
-        $sql = "INSERT INTO hotel (address, description, phone_number)
-            VALUES ('$address','$description','$phone_number')";
-        $result = sqlsrv_query($link, $sql);
-        if($result === false)
+        //$sql = "INSERT INTO hotel (address, description, phone_number)
+        //    VALUES ('$address','$description','$phone_number')";
+        //$result = sqlsrv_query($link, $sql);
+
+        $sql = "EXEC dbo.addHotel @Address = ?, @Description = ?, @PhoneNumber = ?";
+        $stmt = sqlsrv_prepare($link, $sql, array( &$address, &$description, &$phone_number ));
+        if(!sqlsrv_execute($stmt))
         {
             $redirectURL = '../views/addEditHotel.php';
         }
@@ -35,9 +41,9 @@ if(isset($_POST['submit'])){
 }
 if (($_REQUEST['action_type'] == 'delete') && !empty($_GET['id']))
 {
-    $id = $_GET['id'];
-    $sql = "DELETE FROM hotel WHERE id = ".$id;
-    $result = sqlsrv_query($link, $sql);
+    $sql = "EXEC dbo.deleteHotel @HotelId = ?";
+    $stmt = sqlsrv_prepare($link, $sql, array( &$_GET['id']));
+    sqlsrv_execute($stmt);
 }
 header("Location:".$redirectURL);
 exit();

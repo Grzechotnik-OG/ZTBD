@@ -4,19 +4,37 @@ require_once '../config.php';
 
 if(!empty($_GET['id']))
 {
-    $sql = "SELECT * FROM hotel WHERE id = ".$_GET['id'];
-    $sqlRooms = "SELECT * FROM room where hotel_id = ".$_GET['id'];
-    $sqlServices = "SELECT hotel_service.id, hotel_service.price, service.id AS service_id, service.name, service.description FROM hotel_service 
-    INNER JOIN service ON service_id=service.id
-    where hotel_id = ".$_GET['id'];
+    $hotelId = $_GET['id'];
+    //$sql = "SELECT * FROM hotel WHERE id = ".$_GET['id'];
+    //$sqlRooms = "SELECT * FROM room where hotel_id = ".$_GET['id'];
+    //$sqlServices = "SELECT hotel_service.id, hotel_service.price, service.id AS service_id, service.name, service.description FROM hotel_service 
+    //INNER JOIN service ON service_id=service.id
+    //where hotel_id = ".$_GET['id'];
+//
+    //$result = sqlsrv_query($link, $sql);
+    //$hotel = sqlsrv_fetch_object( $result );
+//
+    //$resultRooms = sqlsrv_query($link, $sqlRooms);
+    //$room = sqlsrv_fetch_object( $resultRooms );
+    //$resultServices = sqlsrv_query($link, $sqlServices);
+    //$service = sqlsrv_fetch_object( $resultServices );
 
-    $result = sqlsrv_query($link, $sql);
-    $hotel = sqlsrv_fetch_object( $result );
+    $sql = "EXEC dbo.getHotel @HotelId = ?";
+    $stmt = sqlsrv_prepare($link, $sql, array( &$hotelId));
+    sqlsrv_execute($stmt);
+    $hotel = sqlsrv_fetch_object( $stmt );
 
-    $resultRooms = sqlsrv_query($link, $sqlRooms);
-    $room = sqlsrv_fetch_object( $resultRooms );
-    $resultServices = sqlsrv_query($link, $sqlServices);
-    $service = sqlsrv_fetch_object( $resultServices );
+    $sql = "EXEC dbo.hotelRoomsList @HotelId = ?";
+    $stmtRooms = sqlsrv_prepare($link, $sql, array( &$hotelId));
+    sqlsrv_execute($stmtRooms);
+    $room = sqlsrv_fetch_object( $stmtRooms );
+
+    $sql = "EXEC dbo.getServicesByHotelId @HotelId = ?";
+    $stmtService = sqlsrv_prepare($link, $sql, array( &$hotelId));
+    sqlsrv_execute($stmtService);
+    $service = sqlsrv_fetch_object( $stmtService );
+
+
 }else{
     
 }
@@ -73,7 +91,7 @@ $actionLabel = "Info";
                     <a href="../actions/roomAction.php?action_type=delete&id=<?php echo $room->id; ?>" class="btn btn-danger" onclick="return confirm('Are you sure to delete?');">Delete</a>
                 </td>
                 </tr>
-                <?php } while($room = sqlsrv_fetch_object( $resultRooms ));} else { ?>
+                <?php } while($room = sqlsrv_fetch_object( $stmtRooms ));} else { ?>
                 <tr><td colspan="7">No member(s) found...</td></tr>
                 <?php } ?>
             </tbody>
@@ -106,7 +124,7 @@ $actionLabel = "Info";
                     <a href="../actions/hotelServiceAction.php?action_type=delete&id=<?php echo $service->id; ?>&hotel_id=<?php echo $hotel->id; ?>" class="btn btn-danger" onclick="return confirm('Are you sure to delete?');">Delete</a>
                 </td>
                 </tr>
-                <?php } while($service = sqlsrv_fetch_object( $resultServices ));} else { ?>
+                <?php } while($service = sqlsrv_fetch_object( $stmtService ));} else { ?>
                 <tr><td colspan="7">No member(s) found...</td></tr>
                 <?php } ?>
             </tbody>

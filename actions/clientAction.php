@@ -16,14 +16,21 @@ if(isset($_POST['submit']) && isset($_POST['id'])){
     {
         $idStr = '?id='.$id;
 
-        $sql = "UPDATE client SET address = '$address', name = '$name', email = '$email', 
-            surname = '$surname', phone_number = '$phone_number'
-            WHERE id = ".$id;
-        $result = sqlsrv_query($link, $sql);
-        if($result === false)
+        //$sql = "UPDATE client SET address = '$address', name = '$name', email = '$email', 
+        //    surname = '$surname', phone_number = '$phone_number'
+        //    WHERE id = ".$id;
+        //$result = sqlsrv_query($link, $sql);
+        //if($result === false)
+        //{
+        //    $redirectURL = '../views/addEditClient.php'.$idStr;
+        //}
+        $sql = "EXEC dbo.updateClient @Address = ?, @Name= ?, @Surname= ?, @Email= ?, @PhoneNumber= ?, @ClientId = ?";
+        $stmt = sqlsrv_prepare($link, $sql, array( &$address, &$name, &$surname, &$email, &$phone_number, &$id ));
+        if(!sqlsrv_execute($stmt))
         {
             $redirectURL = '../views/addEditClient.php'.$idStr;
         }
+
     }
     else
     {
@@ -34,6 +41,13 @@ if(isset($_POST['submit']) && isset($_POST['id'])){
         {
             $redirectURL = '../views/addEditClient.php';
         }
+
+        //$sql = "EXEC dbo.addClient @Address = ?, @Name= ?, @Surname= ?, @Email= ?, @PhoneNumber= ?";
+        //$stmt = sqlsrv_prepare($link, $sql, array( &$address, &$name, &$surname, &$email, &$phone_number ));
+        //if(!sqlsrv_execute($stmt))
+        //{
+        //    $redirectURL = '../views/addEditClient.php';
+        //}
     }
 }
 else if(isset($_POST['submit']) && isset($_POST['client_id'])){
@@ -51,9 +65,9 @@ else if(isset($_POST['submit']) && isset($_POST['client_id'])){
 
 if (($_REQUEST['action_type'] == 'delete') && !empty($_GET['id']))
 {
-    $id = $_GET['id'];
-    $sql = "DELETE FROM client WHERE id = ".$id;
-    $result = sqlsrv_query($link, $sql);
+    $sql = "EXEC dbo.deleteClient @ClientId = ?";
+    $stmt = sqlsrv_prepare($link, $sql, array( &$_GET['id']));
+    sqlsrv_execute($stmt);
 }
 header("Location:".$redirectURL);
 exit();
