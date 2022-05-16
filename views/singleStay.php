@@ -73,7 +73,7 @@ if(!empty($_GET['id']))
                     ?>
                     </select>
                 </div>
-                <a href="index.php" class="btn btn-secondary">Back</a>
+                <a href="../index.php" class="btn btn-secondary">Back</a>
                 <input type="hidden" name="id" value="<?php echo $stay->id; ?>">
                 <input type="submit" name="submit" class="btn btn-success" value="Submit">
             </form>

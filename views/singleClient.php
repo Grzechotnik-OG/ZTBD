@@ -111,6 +111,7 @@ $actionLabel = "Info";
             $tmp = $servicePrice->price + $roomPrice->price +$serviceReservationPrice->price + $roomReservationPrice->price - $client->registered_payment;
             echo "Reckoning: ".$tmp; ?><br/>
             <a href="addEditClient.php?id=<?php echo $client->id; ?>"class="btn btn-warning">Edit</a>
+            <a href="facture.php?id=<?php echo $client->id; ?>"class="btn btn-info">Facture</a>
         </div>
 
         <div class="col-md-12 head">
