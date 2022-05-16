@@ -71,6 +71,16 @@ if(!empty($_GET['id']))
     sqlsrv_execute($stmt);
     $roomPrice = sqlsrv_fetch_object( $stmt );
 
+    $sql = "EXEC dbo.getStayPriceByReservationId @ClientId = ?";
+    $stmt = sqlsrv_prepare($link, $sql, array( &$clientId));
+    sqlsrv_execute($stmt);
+    $serviceReservationPrice = sqlsrv_fetch_object( $stmt );
+
+    $sql = "EXEC dbo.getRoomPriceByReservationId @ClientId = ?";
+    $stmt = sqlsrv_prepare($link, $sql, array( &$clientId));
+    sqlsrv_execute($stmt);
+    $roomReservationPrice = sqlsrv_fetch_object( $stmt );
+
 }else{
     
 }
@@ -98,7 +108,7 @@ $actionLabel = "Info";
             <?php echo "Address: ".$client->address; ?><br/>
             <?php echo "Phone number: ".$client->phone_number; ?><br/>
             <?php
-            $tmp = $servicePrice->price + $roomPrice->price - $client->registered_payment;
+            $tmp = $servicePrice->price + $roomPrice->price +$serviceReservationPrice->price + $roomReservationPrice->price - $client->registered_payment;
             echo "Reckoning: ".$tmp; ?><br/>
             <a href="addEditClient.php?id=<?php echo $client->id; ?>"class="btn btn-warning">Edit</a>
         </div>

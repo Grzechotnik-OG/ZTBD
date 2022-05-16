@@ -34,20 +34,20 @@ if(isset($_POST['submit']) && isset($_POST['id'])){
     }
     else
     {
-        $sql = "INSERT INTO client (address, name, surname, email, phone_number)
-            VALUES ('$address','$name', '$surname', '$email', '$phone_number')";
-        $result = sqlsrv_query($link, $sql);
-        if($result === false)
+       //$sql = "INSERT INTO client (address, name, surname, email, phone_number)
+       //    VALUES ('$address','$name', '$surname', '$email', '$phone_number')";
+       //$result = sqlsrv_query($link, $sql);
+       //if($result === false)
+       //{
+       //    $redirectURL = '../views/addEditClient.php';
+       //}
+
+        $sql = "EXEC dbo.addClient @Address = ?, @Name= ?, @Surname= ?, @Email= ?, @PhoneNumber= ?";
+        $stmt = sqlsrv_prepare($link, $sql, array( &$address, &$name, &$surname, &$email, &$phone_number ));
+        if(!sqlsrv_execute($stmt))
         {
             $redirectURL = '../views/addEditClient.php';
         }
-
-        //$sql = "EXEC dbo.addClient @Address = ?, @Name= ?, @Surname= ?, @Email= ?, @PhoneNumber= ?";
-        //$stmt = sqlsrv_prepare($link, $sql, array( &$address, &$name, &$surname, &$email, &$phone_number ));
-        //if(!sqlsrv_execute($stmt))
-        //{
-        //    $redirectURL = '../views/addEditClient.php';
-        //}
     }
 }
 else if(isset($_POST['submit']) && isset($_POST['client_id'])){

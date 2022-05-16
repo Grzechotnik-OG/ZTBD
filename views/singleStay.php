@@ -104,7 +104,7 @@ if(!empty($_GET['id']))
                     <a href="../actions/hotelServiceStayAction.php?action_type=delete&id=<?php echo $service->id; ?>&stay_id=<?php echo $stay->id; ?>" class="btn btn-danger" onclick="return confirm('Are you sure to delete?');">Delete</a>
                     </td>
                 </tr>
-                <?php } while($service = sqlsrv_fetch_object( $resultService ));} else { ?>
+                <?php } while($service = sqlsrv_fetch_object( $stmtService ));} else { ?>
                 <tr><td colspan="7">No member(s) found...</td></tr>
                 <?php } ?>
             </tbody>
